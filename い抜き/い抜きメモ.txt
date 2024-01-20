@@ -1,0 +1,22 @@
+####
+$inputData2 = @()
+{
+    param (
+        $dataArys,
+        [ref]$refInputData
+    )
+#####
+# 2次元配列のinputData変数を作成
+$inputData = @()
+
+# dataArys変数から4つずつ要素を取り出す
+for ($i = 0; $i -lt $dataArys.Length; $i += 4) {
+    # 空行の要素を追加して新しい配列を作る
+    $newArray = @($dataArys[$i], $dataArys[$i+1], $dataArys[$i+2], $dataArys[$i+3], "")
+    # inputData変数に追加する
+    $inputData += , $newArray
+}
+####
+    $refInputData.Value = $inputData
+}.Invoke($dataArys, [ref]$inputData2)
+####

@@ -8,8 +8,6 @@ if ($args) {
     throw
 }
 
-Write-Host $local:MyInvocation.MyCommand.Path
-
 function global:Chrome {
     param (
         [switch]$edge,
@@ -36,3 +34,5 @@ function global:Chrome {
     }
     Start-Process $path $params
 }
+
+Write-Host $local:MyInvocation.MyCommand.Path

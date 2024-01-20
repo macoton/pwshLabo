@@ -8,8 +8,6 @@ if ($args) {
     throw
 }
 
-Write-Host $local:MyInvocation.MyCommand.Path
-
 function global:RestScr {
     param (
         $path,
@@ -111,8 +109,7 @@ function global:GetPath2 {
     return [Environment]::GetEnvironmentVariable('Path', $target) -replace '\\?;', "`n";
 }
 
-PrintScr
-
+Write-Host $local:MyInvocation.MyCommand.Path
 $global:MyInvocationMyCommandPath = $local:MyInvocation.MyCommand.Path
 $global:MyInvocationMyCommandPathParent = Split-Path $global:MyInvocationMyCommandPath -Parent
 $global:MyInvocationMyCommandLastWriteTime = (Get-ItemProperty $global:MyInvocationMyCommandPath).LastWriteTime
@@ -128,7 +125,7 @@ $global:readScrs =
     (Join-Path $global:MyInvocationMyCommandPathParent 'xrea.ps1'),
     (Join-Path $global:MyInvocationMyCommandPathParent 'sub2.ps1'),
     (Join-Path ($global:MyInvocationMyCommandPathParent, 'grep' -join '/') 'grep.ps1')
-
+PrintScr
 foreach ($readScr in $global:readScrs) {
-    Scr $readScr
+    StartScr $readScr
 }

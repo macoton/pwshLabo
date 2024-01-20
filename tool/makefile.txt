@@ -1,0 +1,35 @@
+CC = gcc
+
+LOG = log
+
+ALLLOG = all.log
+
+TARGET = iam
+
+OBJS = iam.o
+
+target: $(TARGET)
+
+$(TARGET): $(OBJS)
+	-@mkdir $(LOG) 2>/dev/null
+	@$(CC) -Wall -O2 -o $@ $^ 2>> $(LOG)/link.log
+
+%.o: %.c
+	-@mkdir $(LOG) 2>/dev/null
+	@$(CC) -c $< -o $*.o 2>> $(LOG)/$*.log
+
+log: $(ALLLOG)
+	cat $<
+
+$(ALLLOG): $(LOG)/*.log
+	cat $^ > $@
+
+clean:
+	@$(RM) $(OBJS) $(TARGET) $(LOG)/*.log $(ALLLOG)
+	@rmdir $(LOG)
+
+all: clean $ target log
+
+test:
+	@echo $(CC)
+	@echo $(RM)

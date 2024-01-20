@@ -8,45 +8,6 @@ if ($args) {
     throw
 }
 
-Write-Host $local:MyInvocation.MyCommand.paths
-
-$global:grepOption = @{
-    recurse = $false
-    #recurse = $true
-    startWords =
-        '#if 0',
-        '/\*',
-        '"'
-    endWords =
-        '#endif',
-        '\*/',
-        '[^\\]"'
-    fromWords =
-        '[^\r\n]',
-        '[^\r\n]',
-        '[^\r\n]'
-    toWords =
-        ' ',
-        ' ',
-        ' '
-}
-{
-    $global:grepOption += @{
-        fromWords =
-            '',
-            '',
-            ''
-        toWords =
-            '',
-            '',
-            ''
-        testWords =
-            'qqq',
-            'qqq',
-            'qqq'
-    }
-}
-
 function global:Grep {
     param (
         [string[]]$input1s,
@@ -123,6 +84,43 @@ function global:Grep {
     }
 }
 
+Write-Host $local:MyInvocation.MyCommand.paths
+$global:grepOption = @{
+    recurse = $false
+    #recurse = $true
+    startWords =
+        '#if 0',
+        '/\*',
+        '"'
+    endWords =
+        '#endif',
+        '\*/',
+        '[^\\]"'
+    fromWords =
+        '[^\r\n]',
+        '[^\r\n]',
+        '[^\r\n]'
+    toWords =
+        ' ',
+        ' ',
+        ' '
+}
+{
+    $global:grepOption += @{
+        fromWords =
+            '',
+            '',
+            ''
+        toWords =
+            '',
+            '',
+            ''
+        testWords =
+            'qqq',
+            'qqq',
+            'qqq'
+    }
+}
 #$input1s = ,'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b'
 $input1s = ,'\s+'
 $input2s = ,''
@@ -130,5 +128,5 @@ $a = ,'a'
 $b = 'a',
     ''
 $outputs = @()
-Grep $input1s $input2s ([ref]$outputs) (Join-Path 'scr' 'grep' 'in') '*.c'
+Grep $input1s $input2s ([ref]$outputs) (Join-Path ($global:MyInvocationMyCommandPathParent, 'grep' -join '/') 'in') '*.c'
 $outputs

@@ -8,8 +8,6 @@ if ($args) {
     throw
 }
 
-Write-Host $local:MyInvocation.MyCommand.Path
-
 function global:ValuesToArray {
     param (
         [ref]$values,
@@ -41,3 +39,5 @@ function global:ValuesFromArray {
         }
     }
 }
+
+Write-Host $local:MyInvocation.MyCommand.Path
