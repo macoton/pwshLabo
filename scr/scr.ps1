@@ -125,7 +125,7 @@ $global:readScrs =
     (Join-Path $global:MyInvocationMyCommandPathParent 'xrea.ps1'),
     (Join-Path $global:MyInvocationMyCommandPathParent 'sub2.ps1'),
     (Join-Path ($global:MyInvocationMyCommandPathParent, 'grep' -join '/') 'grep.ps1'),
-    ('C:\git\privateLabo\scr\scr.ps1')
+    ('C:\git\private_pwshLabo\scr\scr.ps1')
 PrintScr
 foreach ($readScr in $global:readScrs) {
     StartScr $readScr
