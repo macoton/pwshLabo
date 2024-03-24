@@ -72,12 +72,12 @@ $boms = (
 )
 
 $bins = (
-    ('utf8', (, [int][char]"`t")),
-    ('utf8', (, [int][char]"`n")),
-    ('utf8', (, [int][char]"`r")),
+    ('ascii', (, [int][char]"`t")), # 9
+    ('ascii', (, [int][char]"`n")), # 10
+    ('ascii', (, [int][char]"`r")), # 13
     ('binary', (, 0x00), (, 0x1f)),
     ('binary', (, 0x7f)),
-    ('utf8', (, 0x00), (, 0x7f)),
+    ('ascii', (, 0x00), (, 0x7f)),
     ('utf8', (0xc2, 0x80), (0xdf, 0xbf)),
     ('utf8', (0xe0, 0x80, 0x80), (0xef, 0xbf, 0xbf)),
     ('utf8', (0xf0, 0x80, 0x80, 0x80), (0xf4, 0xbf, 0xbf, 0xbf)),
@@ -128,7 +128,9 @@ Get-ChildItem $path $filter -Recurse:(!$noRecurse) -File | ForEach-Object {
             $bytesTemp = $bytes[$index..($index + $from.Count - 1)]
             if (0 -lt ((0, 1) -eq (Compare-Element $bytesTemp $from $from.Count)).Count -and
             0 -lt ((-1, 0) -eq (Compare-Element $bytesTemp $to $to.Count)).Count) {
-                $encodes[$encode]++
+                if ('ascii' -ne $encode) {
+                    $encodes[$encode]++
+                }
                 $index += $from.Count
                 break
             }
@@ -139,7 +141,7 @@ Get-ChildItem $path $filter -Recurse:(!$noRecurse) -File | ForEach-Object {
         }
     }
     $maxValue = $encodes.Values | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum
-    $maxKey = $encodes.GetEnumerator() | Where-Object { $_.Value -eq $maxValue } | Select-Object -ExpandProperty Key
+    $maxKey = $encodes.GetEnumerator() | Where-Object { $_.Value -eq $maxValue } | Select-Object -First 1 -ExpandProperty Key
     $result.encode = $maxKey
     $result
     $br.Close()
