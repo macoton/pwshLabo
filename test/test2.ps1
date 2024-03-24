@@ -67,16 +67,26 @@ function Compare-Element {
 }
 
 $boms = (
-    ((0xef, 0xbb, 0xbf), (0xef, 0xbb, 0xbf), 'bom'),
-    (@(), @(), '')
+    ('bom', (0xef, 0xbb, 0xbf)),
+    ('', @(), @())
 )
 
 $bins = (
-    ((, 0x00), (, 0x7f), 'utf8'),
-    ((0xc2, 0x80), (0xdf, 0xbf), 'utf8'),
-    ((0xe0, 0x80, 0x80), (0xef, 0xbf, 0xbf), 'utf8'),
-    ((0xf0, 0x80, 0x80, 0x80), (0xf4, 0xbf, 0xbf, 0xbf), 'utf8'),
-    ((, 0x00), (, 0xff), 'unknown')
+    ('utf8', (, [int][char]"`t")),
+    ('utf8', (, [int][char]"`n")),
+    ('utf8', (, [int][char]"`r")),
+    ('binary', (, 0x00), (, 0x1f)),
+    ('binary', (, 0x7f)),
+    ('utf8', (, 0x00), (, 0x7f)),
+    ('utf8', (0xc2, 0x80), (0xdf, 0xbf)),
+    ('utf8', (0xe0, 0x80, 0x80), (0xef, 0xbf, 0xbf)),
+    ('utf8', (0xf0, 0x80, 0x80, 0x80), (0xf4, 0xbf, 0xbf, 0xbf)),
+    ('sjis', (0x81, 0x40), (0x9f, 0x7e)),
+    ('sjis', (0x81, 0x80), (0x9f, 0xfc)),
+    ('sjis', (0xe0, 0x40), (0xef, 0x7e)),
+    ('sjis', (0xe0, 0x80), (0xef, 0xfc)),
+    ('sjis', (, 0xa1), (, 0xdf)),
+    ('unknown', (, 0x00), (, 0xff))
 )
 
 Get-ChildItem $path $filter -Recurse:(!$noRecurse) -File | ForEach-Object {
@@ -92,11 +102,15 @@ Get-ChildItem $path $filter -Recurse:(!$noRecurse) -File | ForEach-Object {
     $index = 0
     $encodes = @{}
     foreach ($bom in $boms) {
-        $bytesTemp = $bytes[$index..($index + $bom[0].Count - 1)]
-        if (0 -lt ((0, 1) -eq (Compare-Element $bytesTemp $bom[0] $bom[0].Count)).Count -and
-        0 -lt ((-1, 0) -eq (Compare-Element $bytesTemp $bom[1] $bom[1].Count)).Count) {
-            $result.bom = $bom[2]
-            $index += $bom[0].Count
+        ($encode, $from, $to) = $bom
+        if ($null -eq $to) {
+            $to = $from
+        }
+        $bytesTemp = $bytes[$index..($index + $from.Count - 1)]
+        if (0 -lt ((0, 1) -eq (Compare-Element $bytesTemp $from $from.Count)).Count -and
+        0 -lt ((-1, 0) -eq (Compare-Element $bytesTemp $to $to.Count)).Count) {
+            $result.bom = $encode
+            $index += $from.Count
             break
         }
     }
@@ -107,11 +121,15 @@ Get-ChildItem $path $filter -Recurse:(!$noRecurse) -File | ForEach-Object {
         }
         $index2 = 0
         foreach ($bin in $bins) {
-            $bytesTemp = $bytes[$index..($index + $bin[0].Count - 1)]
-            if (0 -lt ((0, 1) -eq (Compare-Element $bytesTemp $bin[0] $bin[0].Count)).Count -and
-            0 -lt ((-1, 0) -eq (Compare-Element $bytesTemp $bin[1] $bin[1].Count)).Count) {
-                $encodes[$bin[2]]++
-                $index += $bin[0].Count
+            ($encode, $from, $to) = $bin
+            if ($null -eq $to) {
+                $to = $from
+            }
+            $bytesTemp = $bytes[$index..($index + $from.Count - 1)]
+            if (0 -lt ((0, 1) -eq (Compare-Element $bytesTemp $from $from.Count)).Count -and
+            0 -lt ((-1, 0) -eq (Compare-Element $bytesTemp $to $to.Count)).Count) {
+                $encodes[$encode]++
+                $index += $from.Count
                 break
             }
             $index2++
@@ -128,4 +146,4 @@ Get-ChildItem $path $filter -Recurse:(!$noRecurse) -File | ForEach-Object {
     $fs.Close()
 }
 
-return 0
+exit 0

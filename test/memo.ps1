@@ -19,4 +19,4 @@ if ($null -ne $args) {
 # If-Else $test function:Function $removeAfterGet 0
 # Get-Item function:*
 
-return 0
+exit 0

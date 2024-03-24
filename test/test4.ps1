@@ -26,4 +26,4 @@ $verUTF8
 $verDefault
 $verUTF8
 
-return 0
+exit 0

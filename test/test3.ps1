@@ -35,4 +35,4 @@ if ($remove) {
     $items
 }
 
-return 0
+exit 0

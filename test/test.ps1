@@ -26,4 +26,4 @@ function global:GlobalFunction {
     )   
 }
 
-return 0
+exit 0

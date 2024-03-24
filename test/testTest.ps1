@@ -101,4 +101,4 @@ If-Then-Else $test function:If-Then $remove
 If-Then-Else $test function:If-Else $remove
 If-Then-Else $test function:If-Then-Else $remove
 
-return 0
+exit 0

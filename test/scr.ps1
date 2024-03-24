@@ -17,4 +17,4 @@ if ($null -ne $args) {
 . C:\git\private_pwshLabo\scr\scr.ps1
 scba
 
-return 0
+exit 0
