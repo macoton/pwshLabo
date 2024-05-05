@@ -69,16 +69,18 @@ if ($settingScr.ContainsKey('scr')) {
 $settingScr.scr.startScr = $local:MyInvocation.MyCommand.Path
 $scrParent = Split-Path $local:MyInvocation.MyCommand.Path -Parent
 # 必要スクリプト群
-$settingScr.scr.needScrs = @(
+$settingScr.scr.needScrs = [System.Collections.ArrayList]::new()
+$settingScr.scr.needScrs.AddRange(@(
     (Join-Path $scrParent 'Init.ps1')
     (Join-Path $scrParent 'ConvertValue.ps1')
-)
+))
 # 読み込みスクリプト群
-$settingScr.scr.readScrs = @(
+$settingScr.scr.readScrs = [System.Collections.ArrayList]::new()
+$settingScr.scr.readScrs.AddRange(@(
     (Join-Path $scrParent 'Chrome.ps1')
     (Join-Path $scrParent 'CheckBattery.ps1')
     (Join-Path $scrParent 'var.ps1')
-)
+))
 # スクリプトを開始
 $scrs = [System.Collections.ArrayList]::new()
 $scrs.AddRange($settingScr.scr.needScrs)
