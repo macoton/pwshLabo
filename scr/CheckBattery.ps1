@@ -142,8 +142,12 @@ $settingScr.checkBattery = @{
     notStartJob = $false
     checkSpeech = 'すてーたす{0}げんざいち{1}'
     checkPrint = 'status: {0}、level: {1}'
+    startLocation = 'C:\git\pwshLabo'
 }
 
-scba
+$location = Get-Location
+if ($settingScr.checkBattery.startLocation -eq $location) {
+    Start-Check-Battery
+}
 
 exit 0
