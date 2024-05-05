@@ -144,4 +144,6 @@ $settingScr.checkBattery = @{
     checkPrint = 'status: {0}、level: {1}'
 }
 
+scba
+
 exit 0
