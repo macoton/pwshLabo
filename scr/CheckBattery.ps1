@@ -142,7 +142,8 @@ $settingScr.checkBattery = @{
     notStartJob = $false
     checkSpeech = 'すてーたす{0}げんざいち{1}'
     checkPrint = 'status: {0}、level: {1}'
-    startLocation = 'C:\git\pwshLabo'
+    # startLocation = 'C:\git\pwshLabo'
+    startLocation = 'C:\git\flutterLabo'
 }
 
 $location = Get-Location
