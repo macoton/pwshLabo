@@ -37,3 +37,7 @@ function Get-Self-Ip {
 }
     return $result
 }
+
+Write-Host $local:MyInvocation.MyCommand.Path
+
+exit 0
