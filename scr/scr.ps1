@@ -77,8 +77,9 @@ $settingScr.scr.needScrs.AddRange(@(
 # 読み込みスクリプト群
 $settingScr.scr.readScrs = [System.Collections.ArrayList]::new()
 $settingScr.scr.readScrs.AddRange(@(
-    (Join-Path $scrParent 'Chrome.ps1')
+    (Join-Path $scrParent 'chrome.ps1')
     (Join-Path $scrParent 'CheckBattery.ps1')
+    (Join-Path $scrParent 'GetSelf.ps1')
     (Join-Path $scrParent 'var.ps1')
 ))
 # スクリプトを開始
