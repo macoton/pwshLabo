@@ -101,6 +101,10 @@ $button.Add_Click({
 $form.Controls.Add($button)
 $form.ShowDialog()
 
+$xamlPath = 'GrepToolTest2.xaml'
+$xamlData = [System.Windows.Markup.XamlWriter]::Save($form)
+Set-Content $xamlPath $xamlData
+
 Write-Host $local:MyInvocation.MyCommand.Path
 
 exit 0
