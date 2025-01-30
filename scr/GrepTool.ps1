@@ -7,6 +7,24 @@ if ($null -ne $args) {
     throw
 }
 
+function GrepTool-Get-Help {
+    param (
+        [Parameter(ValueFromRemainingArguments = $true)]$args
+    )
+    if ($null -ne $args) {
+        throw
+    }
+    @'
+名前
+    GrepTool
+
+使い方
+GrepTool-Get-ChildItem '.' ('*.c *.h *.cpp' -split ' ') |
+GrepTool-Select-String '' '\bmain\b' 'default' |
+GrepTool-Write-Output | Set-Clipboard
+'@
+}
+
 function GrepTool-Get-ChildItem {
     param (
         [string]$path,
