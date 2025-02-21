@@ -18,10 +18,16 @@ function GrepTool-Get-Help {
 名前
     GrepTool
 
-使い方
+使い方１
 GrepTool-Get-ChildItem '.' ('*.c *.h *.cpp' -split ' ') |
 GrepTool-Select-String '' '\bmain\b' 'default' |
 GrepTool-Write-Output | Set-Clipboard
+
+使い方２
+GrepTool-Get-ChildItem '.' ('*.c *.h *.cpp' -split ' ') |
+GrepTool-Select-String2 '' 'default' |
+GrepTool-Write-Output2 | Set-Clipboard
+
 '@
 }
 
@@ -93,6 +99,50 @@ function GrepTool-Write-Output {
             throw
         }
         "$($item.Path)($($item.LineNumber)):`t$(& $getTabString $item.Line)`t$($item.Comment)"
+    } end {
+        '終了'
+    }
+}
+
+function GrepTool-Select-String2 {
+    param (
+        [string]$pattern1,
+        $encoding,
+        [Parameter(ValueFromPipeline = $true)][System.IO.FileInfo]$item,
+        [Parameter(ValueFromRemainingArguments = $true)]$args
+    )
+    begin {
+        $global:pattern1 = $pattern1
+        $global:encoding = $encoding
+    } process {
+        if ($null -ne $args) {
+            throw
+        }
+        $select1 = @()
+        if ('' -ne $pattern1) {
+            $select1 = @(Select-String $pattern1 $item -Encoding $encoding)
+        }
+        $select1 | Sort-Object LineNumber
+    }
+}
+
+function GrepTool-Write-Output2 {
+    param (
+        $getTabString = { param($inputString) GrepTool-Get-TabString $inputString },
+        [Parameter(ValueFromPipeline = $true)][Microsoft.PowerShell.Commands.MatchInfo]$item,
+        [Parameter(ValueFromRemainingArguments = $true)]$args
+    )
+    begin {
+        "パス`t$global:path"
+        "ワイルドカード`t$global:includes"
+        "マーク`t$global:pattern1"
+        "エンコード`t$global:encoding"
+        "ファイル名(行番号):`tマーク"
+    } process {
+        if ($null -ne $args) {
+            throw
+        }
+        "$($item.Path)($($item.LineNumber)):`t$($item.matches.Value)"
     } end {
         '終了'
     }
