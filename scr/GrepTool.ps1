@@ -65,6 +65,17 @@ function GrepTool-Select-String {
             throw
         }
         $select1 = @()
+        if ('auto' -eq $encoding) {
+            $bytes = [System.IO.File]::ReadAllBytes($item)
+            $utf8Content = [System.Text.Encoding]::UTF8.GetString($bytes)
+            $utf8Bytes = [System.Text.Encoding]::UTF8.GetBytes($utf8Content)
+            $isUtf8 = ($bytes.Length -eq $utf8Bytes.Length -and -not ($bytes -xor $utf8Bytes))
+            if ($isUtf8) {
+                $encoding = 'utf8'
+            } else {
+                $encoding = 'default'
+            }
+        }
         if ('' -ne $pattern1) {
             $select1 = @(Select-String $pattern1 $item -Encoding $encoding)
         }
@@ -119,6 +130,17 @@ function GrepTool-Select-String2 {
             throw
         }
         $select1 = @()
+        if ('auto' -eq $encoding) {
+            $bytes = [System.IO.File]::ReadAllBytes($item)
+            $utf8Content = [System.Text.Encoding]::UTF8.GetString($bytes)
+            $utf8Bytes = [System.Text.Encoding]::UTF8.GetBytes($utf8Content)
+            $isUtf8 = ($bytes.Length -eq $utf8Bytes.Length -and -not ($bytes -xor $utf8Bytes))
+            if ($isUtf8) {
+                $encoding = 'utf8'
+            } else {
+                $encoding = 'default'
+            }
+        }
         if ('' -ne $pattern1) {
             $select1 = @(Select-String $pattern1 $item -Encoding $encoding)
         }
@@ -135,7 +157,7 @@ function GrepTool-Write-Output2 {
     begin {
         "パス`t$global:path"
         "ワイルドカード`t$global:includes"
-        "マーク`t$global:pattern1"
+        "正規表現`t$global:pattern1"
         "エンコード`t$global:encoding"
         "ファイル名(行番号):`tマーク"
     } process {

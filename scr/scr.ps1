@@ -80,7 +80,8 @@ $settingScr.scr.readScrs.AddRange(@(
     (Join-Path $scrParent 'chrome.ps1')
     (Join-Path $scrParent 'CheckBattery.ps1')
     (Join-Path $scrParent 'GetSelf.ps1')
-    (Join-Path $scrParent 'var.ps1')
+    (Join-Path $scrParent 'var.ps1'),
+    (Join-Path $scrParent 'GrepTool.ps1')
 ))
 # スクリプトを開始
 $scrs = [System.Collections.ArrayList]::new()
