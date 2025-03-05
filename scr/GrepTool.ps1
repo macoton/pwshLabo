@@ -159,12 +159,13 @@ function GrepTool-Write-Output2 {
         "ワイルドカード`t$global:includes"
         "正規表現`t$global:pattern1"
         "エンコード`t$global:encoding"
-        "ファイル名(行番号):`tマーク"
+        "ファイル名(行番号):`t正規表現"
     } process {
         if ($null -ne $args) {
             throw
         }
-        "$($item.Path)($($item.LineNumber)):`t$($item.matches.Value)"
+        # "$($item.Path)($($item.LineNumber)):$($item.matches | ForEach-Object { "`t$($_.Groups[1].Value)`t$($_.Groups[2].Value)" })"
+        "$($item.Path)($($item.LineNumber)):$($item.matches | ForEach-Object { $_.Groups[1..($_.Groups.Count - 1)] | ForEach-Object { "`t$($_.Value)" } })"
     } end {
         '終了'
     }
